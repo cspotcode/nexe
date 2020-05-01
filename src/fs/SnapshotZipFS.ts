@@ -86,9 +86,6 @@ export class SnapshotZipFS extends BasePortableFakeFS {
     this.filter = filter
     this.maxOpenFiles = maxOpenFiles
     this.readOnlyArchives = readOnlyArchives
-
-    this.isZip = new Set()
-    this.notZip = new Set()
   }
 
   getExtractHint(hints: ExtractHintOptions) {
@@ -288,7 +285,7 @@ export class SnapshotZipFS extends BasePortableFakeFS {
       },
       async (zipFs, { archivePath, subPath }) => {
         return this.pathUtils.resolve(
-          await this.baseFs.realpathPromise(archivePath),
+          archivePath,
           this.pathUtils.relative(PortablePath.root, await zipFs.realpathPromise(subPath))
         )
       }
@@ -303,7 +300,7 @@ export class SnapshotZipFS extends BasePortableFakeFS {
       },
       (zipFs, { archivePath, subPath }) => {
         return this.pathUtils.resolve(
-          this.baseFs.realpathSync(archivePath),
+          archivePath,
           this.pathUtils.relative(PortablePath.root, zipFs.realpathSync(subPath))
         )
       }
